@@ -1,3 +1,4 @@
+
 /*
  * flash.c
  *
@@ -18,23 +19,23 @@
 
 void FLASHInit(){
     //
-    // The SSI1 peripheral must be enabled for use.
+    // The SSI0 peripheral must be enabled for use.
     //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_SSI1);
     //
-    // For this example SSI1 is used with PortA[5:2].  The actual port and pins
+    // For this example SSI0 is used with PortA[5:2].  The actual port and pins
     // used may be different on your part, consult the data sheet for more
     // information.  GPIO port A needs to be enabled so these pins can be used.
     // TODO: change this to whichever GPIO port you are using.
     //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     //
-    // Configure the pin muxing for SSI1 functions on port A2, A3, A4, and A5.
+    // Configure the pin muxing for SSI0 functions on port A2, A3, A4, and A5.
     // This step is not necessary if your part does not support pin muxing.
     // TODO: change this to select the port/pin you are using.
     //
     GPIOPinConfigure(GPIO_PD0_SSI1CLK);
-    //GPIOPinConfigure(GPIO_PA3_SSI1FSS);
+    //GPIOPinConfigure(GPIO_PA3_SSI0FSS);
     GPIOPinConfigure(GPIO_PD2_SSI1RX);
     GPIOPinConfigure(GPIO_PD3_SSI1TX);
 
@@ -57,7 +58,7 @@ void FLASHInit(){
     GPIOPinTypeSSI(GPIO_PORTD_BASE, GPIO_PIN_0 | GPIO_PIN_2 | GPIO_PIN_3);
 
     //
-    // Configure and enable the SSI port for SPI master mode.  Use SSI1,
+    // Configure and enable the SSI port for SPI master mode.  Use SSI0,
     // system clock supply, idle clock level low and active low clock in
     // freescale SPI mode, master mode, 1MHz SSI frequency, and 8-bit data.
     // For SPI mode, you can set the polarity of the SSI clock when the SSI
@@ -68,7 +69,7 @@ void FLASHInit(){
     SSIConfigSetExpClk(SSI1_BASE, SysCtlClockGet(), SSI_FRF_MOTO_MODE_0,
                        SSI_MODE_MASTER, 1000000, 8);
     //
-    // Enable the SSI1 module.
+    // Enable the SSI0 module.
     //
     SSIEnable(SSI1_BASE);
 
@@ -82,13 +83,11 @@ void FLASHInit(){
     // FIFO and does not "hang" if there isn't.
     //
     /*
-    while(SSIDataGetNonBlocking(SSI1_BASE, &pui32DataRx[0]))
+    while(SSIDataGetNonBlocking(SSI0_BASE, &pui32DataRx[0]))
     {
     }
     */
 }
-
-//void FLASHGetId()
 
 void FLASHSendCommand(uint32_t * data, uint32_t size){
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
@@ -110,7 +109,56 @@ void FLASHSendCommand(uint32_t * data, uint32_t size){
 
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
     //
-    // Wait until SSI1 is done transferring all the data in the transmit FIFO.
+    // Wait until SSI0 is done transferring all the data in the transmit FIFO.
+    //
+    while(SSIBusy(SSI1_BASE))
+    {
+    }
+}
+
+void FLASHSendCommandNoCS(uint32_t * data, uint32_t size){
+    volatile uint32_t index = 0;
+    for(index = 0; index < size; index++)
+    {
+        //
+        // Send the data using the "blocking" put function.  This function
+        // will wait until there is room in the send FIFO before returning.
+        // This allows you to assure that all the data you send makes it into
+        // the send FIFO.
+        //
+        SSIDataPut(SSI1_BASE, data[index]);
+        while(SSIBusy(SSI1_BASE))
+        {
+        }
+
+    }
+    //
+    // Wait until SSI0 is done transferring all the data in the transmit FIFO.
+    //
+    while(SSIBusy(SSI1_BASE))
+    {
+    }
+}
+
+void FLASHClockOut(uint32_t size){
+    volatile uint32_t index = 0;
+    volatile uint32_t dummy = 0x00;
+    for(index = 0; index < size; index++)
+    {
+        //
+        // Send the data using the "blocking" put function.  This function
+        // will wait until there is room in the send FIFO before returning.
+        // This allows you to assure that all the data you send makes it into
+        // the send FIFO.
+        //
+        SSIDataPut(SSI1_BASE, 0x00);
+        while(SSIBusy(SSI1_BASE))
+        {
+        }
+
+    }
+    //
+    // Wait until SSI0 is done transferring all the data in the transmit FIFO.
     //
     while(SSIBusy(SSI1_BASE))
     {
@@ -132,4 +180,71 @@ void FLASHReadResponse(uint32_t * data, uint32_t size){
         //
         data[index] &= 0x00FF;
     }
+}
+
+void FLASHClockIn(uint32_t size){
+    volatile uint32_t index = 0;
+    uint32_t dummy[1];
+    for(index = 0; index < size; index++)
+    {
+        //
+        // Receive the data using the "blocking" Get function. This function
+        // will wait until there is data in the receive FIFO before returning.
+        //
+        SSIDataGet(SSI1_BASE, &dummy[1]);
+    }
+}
+
+
+void FLASHWriteEnable(){
+    uint32_t dataTx[1];
+    uint32_t dataRx[1];
+    dataTx[0] = 0x06;
+    FLASHSendCommand(dataTx,1);
+    FLASHReadResponse(dataRx,1);
+}
+
+void FLASHWriteAddress(uint32_t * address, uint32_t * data, uint32_t data_width){
+    uint32_t command[1];
+    command[0] = 0x02;
+
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
+    FLASHSendCommandNoCS(command,1);
+    FLASHSendCommandNoCS(address,3);
+    FLASHSendCommandNoCS(data,data_width);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
+
+    FLASHClockIn(data_width+4);
+
+}
+
+void FLASHReadAddress(uint32_t * address, uint32_t * data, uint32_t data_width){
+    uint32_t command[1];
+    command[0] = 0x03;
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
+    FLASHSendCommandNoCS(command,1);
+    FLASHSendCommandNoCS(address,3);
+    FLASHClockOut(data_width);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
+    FLASHReadResponse(data,data_width+4);
+
+}
+
+void FLASHReadId(uint32_t * id){
+    uint32_t dataTx[4] = {0x9f,0x00,0x00,0x00};
+    FLASHSendCommand(dataTx,4);
+    FLASHReadResponse(id,4);
+
+}
+
+void FLASHEraseSector(uint32_t * address){
+    uint32_t command[1];
+    command[0] = 0x20;
+
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
+    FLASHSendCommandNoCS(command,1);
+    FLASHSendCommandNoCS(address,3);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
+
+    FLASHClockIn(4);
 }

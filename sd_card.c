@@ -894,40 +894,39 @@ main(void)
         }
 
     }
-        SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-                       SYSCTL_XTAL_16MHZ);
+
+          unsigned char TXbytes[3]; // or char, but unsigned char is better
+
+
+//          for(i = 0; i < valueToSave; i++){
+//              TXbytes[i] = valueToSave >> (len(valueToSave)-(i*2)) & 0xFF;
+//          }
+
+
+        SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
+
+        uint32_t address[] = {0x01, 0x00, 0x00};
+        uint32_t size = 6;
+        uint32_t data[2] = {0x01, 0x01};
+        uint32_t dataRx[6];
         FLASHInit();
-        uint32_t dataTx[NUM_SSI_DATA];
-        uint32_t dataRx[NUM_SSI_DATA];
-        dataTx[0] = 0x06;
-        volatile uint32_t size = 1;
-        volatile uint32_t index = 0;
-        FLASHSendCommand(dataTx,size);
-        FLASHReadResponse(dataRx,size);
+
+        uint32_t dataTx[1];
 
 
-        dataTx[0] = 0x02;
-        dataTx[1] = 0x2;
-        dataTx[2] = 0x0;
-        dataTx[3] = 0x0;
-        dataTx[4] = 0xa;
-        dataTx[5] = 0x0;
-        size = 6;
-        FLASHSendCommand(dataTx,size);
-        FLASHReadResponse(dataRx,size);
+
+        dataTx[0] = valueToSave & 0xFF;
+        FLASHWriteEnable();
+        FLASHEraseSector(address);
+        FLASHWriteEnable();
+        FLASHWriteAddress(address,dataTx,1);
+        FLASHReadAddress(address,dataRx,1);
 
 
-        dataTx[0] = 0x03;
-        dataTx[1] = 0x2;
-        dataTx[2] = 0x0;
-        dataTx[3] = 0x0;
-        dataTx[4] = 0x0;
-        dataTx[5] = 0x0;
-        FLASHSendCommand(dataTx,size);
-        FLASHReadResponse(dataRx,size);
 
 
-        UARTprintf("Recieved\n", dataRx[index]);
+        int index;
+        UARTprintf("Recieved\n");
         for(index = 0; index < size; index++){
             UARTprintf("'%x' ", dataRx[index]);
         }

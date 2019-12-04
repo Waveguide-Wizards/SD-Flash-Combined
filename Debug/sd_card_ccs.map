@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker Unix v18.12.3                  
 ******************************************************************************
->> Linked Tue Dec  3 12:14:38 2019
+>> Linked Tue Dec  3 22:40:06 2019
 
 OUTPUT FILE NAME:   <sd_card.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000a809
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000a949
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  0000ad1c  000352e4  R  X
+  FLASH                 00000000   00040000  0000ae9c  00035164  R  X
   SRAM                  20000000   00008000  00000cc1  0000733f  RW X
 
 
@@ -19,11 +19,11 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    0000ad20   0000ad20    r-x
+00000000    00000000    0000aea0   0000aea0    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00007a68   00007a68    r-- .const
-  00007cd4    00007cd4    00002f48   00002f48    r-x .text
-  0000ac20    0000ac20    00000100   00000100    r-- .cinit
+  0000026c    0000026c    00007a7c   00007a7c    r-- .const
+  00007ce8    00007ce8    000030b4   000030b4    r-x .text
+  0000ada0    0000ada0    00000100   00000100    r-- .cinit
 20000000    20000000    00000cc3   00000000    rw-
   20000000    20000000    0000075e   00000000    rw- .bss
   20000760    20000760    00000400   00000000    rw- .stack
@@ -38,7 +38,7 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    0000026c     
                   00000000    0000026c     startup_ccs.obj (.intvecs)
 
-.const     0    0000026c    00007a68     
+.const     0    0000026c    00007a7c     
                   0000026c    00007378     cc932.obj (.const:uni2sjis)
                   000075e4    0000020a     sd_card.obj (.const:.string)
                   000077ee    000001e0     cc932.obj (.const:tbl_lower$1)
@@ -48,142 +48,151 @@ section   page    origin      length       input sections
                   00007c40    0000006c                   : sysctl.obj (.const:g_pui32Xtals)
                   00007cac    0000000d     ff.obj (.const:.string:LfnOfs)
                   00007cb9    00000003     --HOLE-- [fill = 0]
-                  00007cbc    0000000c     uartstdio.obj (.const:g_ui32UARTBase)
-                  00007cc8    0000000c     uartstdio.obj (.const:g_ui32UARTPeriph)
+                  00007cbc    0000000c     sd_card.obj (.const:$P$T0$1)
+                  00007cc8    0000000c     uartstdio.obj (.const:g_ui32UARTBase)
+                  00007cd4    0000000c     uartstdio.obj (.const:g_ui32UARTPeriph)
+                  00007ce0    00000008     sd_card.obj (.const:$P$T1$2)
 
-.text      0    00007cd4    00002f48     
-                  00007cd4    00000308     ff.obj (.text:chk_mounted)
-                  00007fdc    00000258     sd_card.obj (.text:main)
-                  00008234    00000233     ff.obj (.text:create_name)
-                  00008467    00000001     --HOLE-- [fill = 0]
-                  00008468    000001ee     uartstdio.obj (.text:UARTvprintf)
-                  00008656    00000002     startup_ccs.obj (.text:FaultISR)
-                  00008658    00000188     sd_card.obj (.text:Cmd_ls)
-                  000087e0    0000015e     ff.obj (.text:f_read)
-                  0000893e    00000002     startup_ccs.obj (.text:IntDefaultHandler)
-                  00008940    00000150     ff.obj (.text:f_open)
-                  00008a90    00000140     mmc-dk-tm4c123g.obj (.text:disk_initialize)
-                  00008bd0    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
-                  00008d02    00000112     ff.obj (.text:dir_register)
-                  00008e14    00000110     driverlib.lib : sysctl.obj (.text:SysCtlClockGet)
-                  00008f24    0000010c     sd_card.obj (.text:Cmd_cd)
-                  00009030    000000f8     ff.obj (.text:dir_next)
-                  00009128    000000f8     ff.obj (.text:get_fileinfo)
-                  00009220    000000f4     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
-                  00009314    000000e2     ff.obj (.text:put_fat)
-                  000093f6    00000002     startup_ccs.obj (.text:NmiSR)
-                  000093f8    000000e0     sd_card.obj (.text:Cmd_cat)
-                  000094d8    000000d8     ff.obj (.text:f_getfree)
-                  000095b0    000000cc     ff.obj (.text:get_fat)
-                  0000967c    000000b8     mmc-dk-tm4c123g.obj (.text:disk_write)
-                  00009734    000000b6     ff.obj (.text:dir_find)
-                  000097ea    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : div0.asm.obj (.text)
-                  000097ec    000000a4     mmc-dk-tm4c123g.obj (.text:power_on)
-                  00009890    000000a0     ff.obj (.text:gen_numname)
-                  00009930    0000009e     ff.obj (.text:dir_read)
-                  000099ce    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  00009a6a    00000002     --HOLE-- [fill = 0]
-                  00009a6c    00000098     uartstdio.obj (.text:UARTgets)
-                  00009b04    00000098     ff.obj (.text:create_chain)
-                  00009b9c    00000090     mmc-dk-tm4c123g.obj (.text:disk_read)
-                  00009c2c    00000080     flash.obj (.text:FLASHInit)
-                  00009cac    0000007c     ff.obj (.text:dir_sdi)
-                  00009d28    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
-                  00009da2    00000002     --HOLE-- [fill = 0]
-                  00009da4    00000074     sd_card.obj (.text:ConfigureUART)
-                  00009e18    00000074     ff.obj (.text:check_fs)
-                  00009e8c    00000074     ff.obj (.text:cmp_lfn)
-                  00009f00    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00009f68    00000066     mmc-dk-tm4c123g.obj (.text:send_cmd)
-                  00009fce    00000002     --HOLE-- [fill = 0]
-                  00009fd0    00000064     cmdline.obj (.text:CmdLineProcess)
-                  0000a034    00000064     sd_card.obj (.text:Cmd_help)
-                  0000a098    00000064     ff.obj (.text:f_opendir)
-                  0000a0fc    00000064     ff.obj (.text:fit_lfn)
-                  0000a160    00000064     ff.obj (.text:follow_path)
-                  0000a1c4    00000062     ff.obj (.text:remove_chain)
-                  0000a226    00000002     --HOLE-- [fill = 0]
-                  0000a228    00000060     uartstdio.obj (.text:UARTStdioConfig)
-                  0000a288    00000060     cc932.obj (.text:ff_convert)
-                  0000a2e8    00000060     ff.obj (.text:pick_lfn)
-                  0000a348    00000060     mmc-dk-tm4c123g.obj (.text:send_initial_clock_train)
-                  0000a3a8    0000005c     flash.obj (.text:FLASHSendCommand)
-                  0000a404    00000056     ff.obj (.text:sync_window)
-                  0000a45a    00000002     --HOLE-- [fill = 0]
-                  0000a45c    00000054     ff.obj (.text:f_readdir)
-                  0000a4b0    00000054     mmc-dk-tm4c123g.obj (.text:set_max_speed)
-                  0000a504    00000052     mmc-dk-tm4c123g.obj (.text:xmit_datablock)
-                  0000a556    00000002     --HOLE-- [fill = 0]
-                  0000a558    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
-                  0000a5a0    00000048     uartstdio.obj (.text:UARTwrite)
-                  0000a5e8    00000048     mmc-dk-tm4c123g.obj (.text:rcvr_datablock)
-                  0000a630    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
-                  0000a674    00000040                                   : u_divt2.asm.obj (.text)
-                  0000a6b4    0000003e     ff.obj (.text:dir_alloc)
-                  0000a6f2    0000003c     driverlib.lib : ssi.obj (.text:SSIConfigSetExpClk)
-                  0000a72e    00000002     --HOLE-- [fill = 0]
-                  0000a730    00000038     flash.obj (.text:FLASHReadResponse)
-                  0000a768    00000036     rtsv7M4_T_le_v4SPD16_eabi.lib : strncpy.c.obj (.text:strncpy)
-                  0000a79e    00000002     --HOLE-- [fill = 0]
-                  0000a7a0    00000034     sd_card.obj (.text:StringFromFResult)
-                  0000a7d4    00000034     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
-                  0000a808    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
-                  0000a83c    00000032     mmc-dk-tm4c123g.obj (.text:send_cmd12)
-                  0000a86e    0000002e     ff.obj (.text:move_window)
-                  0000a89c    0000002c     ff.obj (.text:f_mount)
-                  0000a8c8    0000002c     mmc-dk-tm4c123g.obj (.text:rcvr_spi)
-                  0000a8f4    0000002a     driverlib.lib : gpio.obj (.text:GPIODirModeSet)
-                  0000a91e    00000002     --HOLE-- [fill = 0]
-                  0000a920    00000028     cc932.obj (.text:ff_wtoupper)
-                  0000a948    00000028     ff.obj (.text:validate)
-                  0000a970    00000024     mmc-dk-tm4c123g.obj (.text:xmit_spi)
-                  0000a994    00000020     mmc-dk-tm4c123g.obj (.text:disk_timerproc)
-                  0000a9b4    00000020     mmc-dk-tm4c123g.obj (.text:wait_ready)
-                  0000a9d4    0000001e     ff.obj (.text:ld_clust)
-                  0000a9f2    0000001e     rtsv7M4_T_le_v4SPD16_eabi.lib : strcat.c.obj (.text:strcat)
-                  0000aa10    0000001e     ff.obj (.text:sum_sfn)
-                  0000aa2e    00000002     --HOLE-- [fill = 0]
-                  0000aa30    0000001c     mmc-dk-tm4c123g.obj (.text:DESELECT)
-                  0000aa4c    0000001c     mmc-dk-tm4c123g.obj (.text:SELECT)
-                  0000aa68    0000001c     ff.obj (.text:mem_cmp)
-                  0000aa84    0000001a     uartstdio.obj (.text:UARTprintf)
-                  0000aa9e    00000002     --HOLE-- [fill = 0]
-                  0000aaa0    00000018     sd_card.obj (.text:Cmd_pwd)
-                  0000aab8    00000018     driverlib.lib : gpio.obj (.text:GPIOPinTypeGPIOOutput)
-                  0000aad0    00000018     ff.obj (.text:clust2sect)
-                  0000aae8    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : strcmp.c.obj (.text:strcmp)
-                  0000ab00    00000016     ff.obj (.text:mem_cpy)
-                  0000ab16    00000014     ff.obj (.text:mem_set)
-                  0000ab2a    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : strcpy.c.obj (.text:strcpy)
-                  0000ab3e    00000014                                   : strlen.c.obj (.text:strlen)
-                  0000ab52    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeSSI)
-                  0000ab64    00000012     ff.obj (.text:chk_chr)
-                  0000ab76    00000002     --HOLE-- [fill = 0]
-                  0000ab78    00000010     mmc-dk-tm4c123g.obj (.text:disk_status)
-                  0000ab88    00000010     ff.obj (.text:st_clust)
-                  0000ab98    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  0000aba6    0000000c     driverlib.lib : ssi.obj (.text:SSIDataGet)
-                  0000abb2    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
-                  0000abbe    00000002     --HOLE-- [fill = 0]
-                  0000abc0    0000000c     mmc-dk-tm4c123g.obj (.text:power_off)
-                  0000abcc    0000000c     mmc-dk-tm4c123g.obj (.text:rcvr_spi_m)
-                  0000abd8    0000000a     driverlib.lib : ssi.obj (.text:SSIDataPut)
-                  0000abe2    0000000a                   : ssi.obj (.text:SSIEnable)
-                  0000abec    00000008                   : ssi.obj (.text:SSIBusy)
-                  0000abf4    00000008     mmc-dk-tm4c123g.obj (.text:get_fattime)
-                  0000abfc    00000006     driverlib.lib : gpio.obj (.text:GPIOPinWrite)
-                  0000ac02    00000006     startup_ccs.obj (.text:ResetISR)
-                  0000ac08    00000006     driverlib.lib : sysctl.obj (.text:SysCtlDelay)
-                  0000ac0e    00000006                   : uart.obj (.text:UARTClockSourceSet)
-                  0000ac14    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  0000ac18    00000004                                   : exit.c.obj (.text:abort:abort)
+.text      0    00007ce8    000030b4     
+                  00007ce8    00000308     ff.obj (.text:chk_mounted)
+                  00007ff0    00000233     ff.obj (.text:create_name)
+                  00008223    00000001     --HOLE-- [fill = 0]
+                  00008224    0000022c     sd_card.obj (.text:main)
+                  00008450    000001ee     uartstdio.obj (.text:UARTvprintf)
+                  0000863e    00000002     startup_ccs.obj (.text:FaultISR)
+                  00008640    00000188     sd_card.obj (.text:Cmd_ls)
+                  000087c8    0000015e     ff.obj (.text:f_read)
+                  00008926    00000002     startup_ccs.obj (.text:IntDefaultHandler)
+                  00008928    00000150     ff.obj (.text:f_open)
+                  00008a78    00000140     mmc-dk-tm4c123g.obj (.text:disk_initialize)
+                  00008bb8    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  00008cea    00000112     ff.obj (.text:dir_register)
+                  00008dfc    00000110     driverlib.lib : sysctl.obj (.text:SysCtlClockGet)
+                  00008f0c    0000010c     sd_card.obj (.text:Cmd_cd)
+                  00009018    000000f8     ff.obj (.text:dir_next)
+                  00009110    000000f8     ff.obj (.text:get_fileinfo)
+                  00009208    000000f4     driverlib.lib : sysctl.obj (.text:SysCtlClockSet)
+                  000092fc    000000e2     ff.obj (.text:put_fat)
+                  000093de    00000002     startup_ccs.obj (.text:NmiSR)
+                  000093e0    000000e0     sd_card.obj (.text:Cmd_cat)
+                  000094c0    000000d8     ff.obj (.text:f_getfree)
+                  00009598    000000cc     ff.obj (.text:get_fat)
+                  00009664    000000b8     mmc-dk-tm4c123g.obj (.text:disk_write)
+                  0000971c    000000b6     ff.obj (.text:dir_find)
+                  000097d2    00000002     rtsv7M4_T_le_v4SPD16_eabi.lib : div0.asm.obj (.text)
+                  000097d4    000000a4     mmc-dk-tm4c123g.obj (.text:power_on)
+                  00009878    000000a0     ff.obj (.text:gen_numname)
+                  00009918    0000009e     ff.obj (.text:dir_read)
+                  000099b6    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  00009a52    00000002     --HOLE-- [fill = 0]
+                  00009a54    00000098     uartstdio.obj (.text:UARTgets)
+                  00009aec    00000098     ff.obj (.text:create_chain)
+                  00009b84    00000090     mmc-dk-tm4c123g.obj (.text:disk_read)
+                  00009c14    00000080     flash.obj (.text:FLASHInit)
+                  00009c94    0000007c     ff.obj (.text:dir_sdi)
+                  00009d10    0000007a     rtsv7M4_T_le_v4SPD16_eabi.lib : memset_t2.asm.obj (.text)
+                  00009d8a    00000002     --HOLE-- [fill = 0]
+                  00009d8c    00000074     sd_card.obj (.text:ConfigureUART)
+                  00009e00    00000074     ff.obj (.text:check_fs)
+                  00009e74    00000074     ff.obj (.text:cmp_lfn)
+                  00009ee8    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00009f50    00000066     mmc-dk-tm4c123g.obj (.text:send_cmd)
+                  00009fb6    00000002     --HOLE-- [fill = 0]
+                  00009fb8    00000064     cmdline.obj (.text:CmdLineProcess)
+                  0000a01c    00000064     sd_card.obj (.text:Cmd_help)
+                  0000a080    00000064     ff.obj (.text:f_opendir)
+                  0000a0e4    00000064     ff.obj (.text:fit_lfn)
+                  0000a148    00000064     ff.obj (.text:follow_path)
+                  0000a1ac    00000062     ff.obj (.text:remove_chain)
+                  0000a20e    00000002     --HOLE-- [fill = 0]
+                  0000a210    00000060     uartstdio.obj (.text:UARTStdioConfig)
+                  0000a270    00000060     cc932.obj (.text:ff_convert)
+                  0000a2d0    00000060     ff.obj (.text:pick_lfn)
+                  0000a330    00000060     mmc-dk-tm4c123g.obj (.text:send_initial_clock_train)
+                  0000a390    0000005c     flash.obj (.text:FLASHSendCommand)
+                  0000a3ec    00000056     ff.obj (.text:sync_window)
+                  0000a442    00000002     --HOLE-- [fill = 0]
+                  0000a444    00000054     ff.obj (.text:f_readdir)
+                  0000a498    00000054     mmc-dk-tm4c123g.obj (.text:set_max_speed)
+                  0000a4ec    00000052     mmc-dk-tm4c123g.obj (.text:xmit_datablock)
+                  0000a53e    00000002     --HOLE-- [fill = 0]
+                  0000a540    0000004c     flash.obj (.text:FLASHReadAddress)
+                  0000a58c    0000004c     flash.obj (.text:FLASHWriteAddress)
+                  0000a5d8    00000048     driverlib.lib : gpio.obj (.text:GPIOPinConfigure)
+                  0000a620    00000048     uartstdio.obj (.text:UARTwrite)
+                  0000a668    00000048     mmc-dk-tm4c123g.obj (.text:rcvr_datablock)
+                  0000a6b0    00000044     flash.obj (.text:FLASHSendCommandNoCS)
+                  0000a6f4    00000044     rtsv7M4_T_le_v4SPD16_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit:__TI_auto_init_nobinit_nopinit)
+                  0000a738    00000040     flash.obj (.text:FLASHClockOut)
+                  0000a778    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : u_divt2.asm.obj (.text)
+                  0000a7b8    0000003e     ff.obj (.text:dir_alloc)
+                  0000a7f6    00000002     --HOLE-- [fill = 0]
+                  0000a7f8    0000003c     flash.obj (.text:FLASHEraseSector)
+                  0000a834    0000003c     driverlib.lib : ssi.obj (.text:SSIConfigSetExpClk)
+                  0000a870    00000038     flash.obj (.text:FLASHReadResponse)
+                  0000a8a8    00000036     rtsv7M4_T_le_v4SPD16_eabi.lib : strncpy.c.obj (.text:strncpy)
+                  0000a8de    00000002     --HOLE-- [fill = 0]
+                  0000a8e0    00000034     sd_card.obj (.text:StringFromFResult)
+                  0000a914    00000034     driverlib.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  0000a948    00000034     rtsv7M4_T_le_v4SPD16_eabi.lib : boot_cortex_m.c.obj (.text:_c_int00_noargs:_c_int00_noargs)
+                  0000a97c    00000032     mmc-dk-tm4c123g.obj (.text:send_cmd12)
+                  0000a9ae    0000002e     ff.obj (.text:move_window)
+                  0000a9dc    0000002c     ff.obj (.text:f_mount)
+                  0000aa08    0000002c     mmc-dk-tm4c123g.obj (.text:rcvr_spi)
+                  0000aa34    0000002a     driverlib.lib : gpio.obj (.text:GPIODirModeSet)
+                  0000aa5e    00000002     --HOLE-- [fill = 0]
+                  0000aa60    00000028     flash.obj (.text:FLASHClockIn)
+                  0000aa88    00000028     cc932.obj (.text:ff_wtoupper)
+                  0000aab0    00000028     ff.obj (.text:validate)
+                  0000aad8    00000024     mmc-dk-tm4c123g.obj (.text:xmit_spi)
+                  0000aafc    00000020     mmc-dk-tm4c123g.obj (.text:disk_timerproc)
+                  0000ab1c    00000020     mmc-dk-tm4c123g.obj (.text:wait_ready)
+                  0000ab3c    0000001e     ff.obj (.text:ld_clust)
+                  0000ab5a    0000001e     rtsv7M4_T_le_v4SPD16_eabi.lib : strcat.c.obj (.text:strcat)
+                  0000ab78    0000001e     ff.obj (.text:sum_sfn)
+                  0000ab96    00000002     --HOLE-- [fill = 0]
+                  0000ab98    0000001c     mmc-dk-tm4c123g.obj (.text:DESELECT)
+                  0000abb4    0000001c     mmc-dk-tm4c123g.obj (.text:SELECT)
+                  0000abd0    0000001c     ff.obj (.text:mem_cmp)
+                  0000abec    0000001a     uartstdio.obj (.text:UARTprintf)
+                  0000ac06    00000002     --HOLE-- [fill = 0]
+                  0000ac08    00000018     sd_card.obj (.text:Cmd_pwd)
+                  0000ac20    00000018     flash.obj (.text:FLASHWriteEnable)
+                  0000ac38    00000018     driverlib.lib : gpio.obj (.text:GPIOPinTypeGPIOOutput)
+                  0000ac50    00000018     ff.obj (.text:clust2sect)
+                  0000ac68    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : strcmp.c.obj (.text:strcmp)
+                  0000ac80    00000016     ff.obj (.text:mem_cpy)
+                  0000ac96    00000014     ff.obj (.text:mem_set)
+                  0000acaa    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : strcpy.c.obj (.text:strcpy)
+                  0000acbe    00000014                                   : strlen.c.obj (.text:strlen)
+                  0000acd2    00000012     driverlib.lib : gpio.obj (.text:GPIOPinTypeSSI)
+                  0000ace4    00000012     ff.obj (.text:chk_chr)
+                  0000acf6    00000002     --HOLE-- [fill = 0]
+                  0000acf8    00000010     mmc-dk-tm4c123g.obj (.text:disk_status)
+                  0000ad08    00000010     ff.obj (.text:st_clust)
+                  0000ad18    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  0000ad26    0000000c     driverlib.lib : ssi.obj (.text:SSIDataGet)
+                  0000ad32    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init)
+                  0000ad3e    00000002     --HOLE-- [fill = 0]
+                  0000ad40    0000000c     mmc-dk-tm4c123g.obj (.text:power_off)
+                  0000ad4c    0000000c     mmc-dk-tm4c123g.obj (.text:rcvr_spi_m)
+                  0000ad58    0000000a     driverlib.lib : ssi.obj (.text:SSIDataPut)
+                  0000ad62    0000000a                   : ssi.obj (.text:SSIEnable)
+                  0000ad6c    00000008                   : ssi.obj (.text:SSIBusy)
+                  0000ad74    00000008     mmc-dk-tm4c123g.obj (.text:get_fattime)
+                  0000ad7c    00000006     driverlib.lib : gpio.obj (.text:GPIOPinWrite)
+                  0000ad82    00000006     startup_ccs.obj (.text:ResetISR)
+                  0000ad88    00000006     driverlib.lib : sysctl.obj (.text:SysCtlDelay)
+                  0000ad8e    00000006                   : uart.obj (.text:UARTClockSourceSet)
+                  0000ad94    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  0000ad98    00000004                                   : exit.c.obj (.text:abort:abort)
 
-.cinit     0    0000ac20    00000100     
-                  0000ac20    000000d8     (.cinit..data.load) [load image, compression = lzss]
-                  0000acf8    0000000c     (__TI_handler_table)
-                  0000ad04    00000004     --HOLE-- [fill = 0]
-                  0000ad08    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  0000ad10    00000010     (__TI_cinit_table)
+.cinit     0    0000ada0    00000100     
+                  0000ada0    000000d8     (.cinit..data.load) [load image, compression = lzss]
+                  0000ae78    0000000c     (__TI_handler_table)
+                  0000ae84    00000004     --HOLE-- [fill = 0]
+                  0000ae88    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000ae90    00000010     (__TI_cinit_table)
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -219,11 +228,11 @@ MODULE SUMMARY
        Module                       code    ro data   rw data
        ------                       ----    -------   -------
     ./
-       sd_card.obj                  1776    522       1676   
+       sd_card.obj                  1732    542       1676   
+       flash.obj                    684     0         0      
        startup_ccs.obj              12      620       0      
-       flash.obj                    276     0         0      
     +--+----------------------------+-------+---------+---------+
-       Total:                       2064    1142      1676   
+       Total:                       2428    1162      1676   
                                                              
     ./third_party/fatfs/port/
        mmc-dk-tm4c123g.obj          1546    0         5      
@@ -277,19 +286,19 @@ MODULE SUMMARY
        Stack:                       0       0         1024   
        Linker Generated:            0       252       0      
     +--+----------------------------+-------+---------+---------+
-       Grand Total:                 12077   32203     3264   
+       Grand Total:                 12441   32223     3264   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000ad10 records: 2, size/record: 8, table size: 16
-	.data: load addr=0000ac20, load size=000000d8 bytes, run addr=20000b60, run size=00000163 bytes, compression=lzss
-	.bss: load addr=0000ad08, load size=00000008 bytes, run addr=20000000, run size=0000075e bytes, compression=zero_init
+__TI_cinit_table @ 0000ae90 records: 2, size/record: 8, table size: 16
+	.data: load addr=0000ada0, load size=000000d8 bytes, run addr=20000b60, run size=00000163 bytes, compression=lzss
+	.bss: load addr=0000ae88, load size=00000008 bytes, run addr=20000000, run size=0000075e bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000acf8 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 0000ae78 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -299,107 +308,114 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
-0000ac19  C$$EXIT                       
-00009fd1  CmdLineProcess                
-000093f9  Cmd_cat                       
-00008f25  Cmd_cd                        
-0000a035  Cmd_help                      
-00008659  Cmd_ls                        
-0000aaa1  Cmd_pwd                       
-00009da5  ConfigureUART                 
-00009c2d  FLASHInit                     
-0000a731  FLASHReadResponse             
-0000a3a9  FLASHSendCommand              
-0000a8f5  GPIODirModeSet                
-00008bd1  GPIOPadConfigSet              
-0000a559  GPIOPinConfigure              
-0000aab9  GPIOPinTypeGPIOOutput         
-0000ab53  GPIOPinTypeSSI                
-0000abfd  GPIOPinWrite                  
-0000ac03  ResetISR                      
-0000abed  SSIBusy                       
-0000a6f3  SSIConfigSetExpClk            
-0000aba7  SSIDataGet                    
-0000abd9  SSIDataPut                    
-0000abe3  SSIEnable                     
-0000a7a1  StringFromFResult             
-00008e15  SysCtlClockGet                
-00009221  SysCtlClockSet                
-0000ac09  SysCtlDelay                   
-0000a7d5  SysCtlPeripheralEnable        
-0000a995  SysTickHandler                
-0000ac0f  UARTClockSourceSet            
-0000a229  UARTStdioConfig               
-00009a6d  UARTgets                      
-0000aa85  UARTprintf                    
-00008469  UARTvprintf                   
-0000a5a1  UARTwrite                     
+0000ad99  C$$EXIT                       
+00009fb9  CmdLineProcess                
+000093e1  Cmd_cat                       
+00008f0d  Cmd_cd                        
+0000a01d  Cmd_help                      
+00008641  Cmd_ls                        
+0000ac09  Cmd_pwd                       
+00009d8d  ConfigureUART                 
+0000aa61  FLASHClockIn                  
+0000a739  FLASHClockOut                 
+0000a7f9  FLASHEraseSector              
+00009c15  FLASHInit                     
+0000a541  FLASHReadAddress              
+0000a871  FLASHReadResponse             
+0000a391  FLASHSendCommand              
+0000a6b1  FLASHSendCommandNoCS          
+0000a58d  FLASHWriteAddress             
+0000ac21  FLASHWriteEnable              
+0000aa35  GPIODirModeSet                
+00008bb9  GPIOPadConfigSet              
+0000a5d9  GPIOPinConfigure              
+0000ac39  GPIOPinTypeGPIOOutput         
+0000acd3  GPIOPinTypeSSI                
+0000ad7d  GPIOPinWrite                  
+0000ad83  ResetISR                      
+0000ad6d  SSIBusy                       
+0000a835  SSIConfigSetExpClk            
+0000ad27  SSIDataGet                    
+0000ad59  SSIDataPut                    
+0000ad63  SSIEnable                     
+0000a8e1  StringFromFResult             
+00008dfd  SysCtlClockGet                
+00009209  SysCtlClockSet                
+0000ad89  SysCtlDelay                   
+0000a915  SysCtlPeripheralEnable        
+0000aafd  SysTickHandler                
+0000ad8f  UARTClockSourceSet            
+0000a211  UARTStdioConfig               
+00009a55  UARTgets                      
+0000abed  UARTprintf                    
+00008451  UARTvprintf                   
+0000a621  UARTwrite                     
 20000b60  __STACK_END                   
 00000400  __STACK_SIZE                  
 20000b60  __STACK_TOP                   
-0000ad10  __TI_CINIT_Base               
-0000ad20  __TI_CINIT_Limit              
-0000acf8  __TI_Handler_Table_Base       
-0000ad04  __TI_Handler_Table_Limit      
-0000a631  __TI_auto_init_nobinit_nopinit
-00009f01  __TI_decompress_lzss          
-0000ab99  __TI_decompress_none          
+0000ae90  __TI_CINIT_Base               
+0000aea0  __TI_CINIT_Limit              
+0000ae78  __TI_Handler_Table_Base       
+0000ae84  __TI_Handler_Table_Limit      
+0000a6f5  __TI_auto_init_nobinit_nopinit
+00009ee9  __TI_decompress_lzss          
+0000ad19  __TI_decompress_none          
 ffffffff  __TI_pprof_out_hndl           
 ffffffff  __TI_prof_data_size           
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
-0000abb3  __TI_zero_init                
-000097eb  __aeabi_idiv0                 
-000097eb  __aeabi_ldiv0                 
-00009d29  __aeabi_memclr                
-00009d29  __aeabi_memclr4               
-00009d29  __aeabi_memclr8               
-000099cf  __aeabi_memcpy                
-000099cf  __aeabi_memcpy4               
-000099cf  __aeabi_memcpy8               
-00009d2b  __aeabi_memset                
-00009d2b  __aeabi_memset4               
-00009d2b  __aeabi_memset8               
-0000a675  __aeabi_uidiv                 
-0000a675  __aeabi_uidivmod              
+0000ad33  __TI_zero_init                
+000097d3  __aeabi_idiv0                 
+000097d3  __aeabi_ldiv0                 
+00009d11  __aeabi_memclr                
+00009d11  __aeabi_memclr4               
+00009d11  __aeabi_memclr8               
+000099b7  __aeabi_memcpy                
+000099b7  __aeabi_memcpy4               
+000099b7  __aeabi_memcpy8               
+00009d13  __aeabi_memset                
+00009d13  __aeabi_memset4               
+00009d13  __aeabi_memset8               
+0000a779  __aeabi_uidiv                 
+0000a779  __aeabi_uidivmod              
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
 20000760  __stack                       
-0000a809  _c_int00_noargs               
+0000a949  _c_int00_noargs               
 UNDEFED   _system_post_cinit            
-0000ac15  _system_pre_init              
-0000ac19  abort                         
+0000ad95  _system_pre_init              
+0000ad99  abort                         
 ffffffff  binit                         
-0000aad1  clust2sect                    
-00008a91  disk_initialize               
-00009b9d  disk_read                     
-0000ab79  disk_status                   
-0000a995  disk_timerproc                
-0000967d  disk_write                    
-000094d9  f_getfree                     
-0000a89d  f_mount                       
-00008941  f_open                        
-0000a099  f_opendir                     
-000087e1  f_read                        
-0000a45d  f_readdir                     
-0000a289  ff_convert                    
-0000a921  ff_wtoupper                   
+0000ac51  clust2sect                    
+00008a79  disk_initialize               
+00009b85  disk_read                     
+0000acf9  disk_status                   
+0000aafd  disk_timerproc                
+00009665  disk_write                    
+000094c1  f_getfree                     
+0000a9dd  f_mount                       
+00008929  f_open                        
+0000a081  f_opendir                     
+000087c9  f_read                        
+0000a445  f_readdir                     
+0000a271  ff_convert                    
+0000aa89  ff_wtoupper                   
 00000000  g_pfnVectors                  
 20000c00  g_psCmdTable                  
 20000b60  g_psFResultStrings            
-00009891  gen_numname                   
-000095b1  get_fat                       
-0000abf5  get_fattime                   
-00007fdd  main                          
-000099cf  memcpy                        
-00009d31  memset                        
-00009315  put_fat                       
-0000a9f3  strcat                        
-0000aae9  strcmp                        
-0000ab2b  strcpy                        
-0000ab3f  strlen                        
-0000a769  strncpy                       
+00009879  gen_numname                   
+00009599  get_fat                       
+0000ad75  get_fattime                   
+00008225  main                          
+000099b7  memcpy                        
+00009d19  memset                        
+000092fd  put_fat                       
+0000ab5b  strcat                        
+0000ac69  strcmp                        
+0000acab  strcpy                        
+0000acbf  strlen                        
+0000a8a9  strncpy                       
 20000754  valueToSave                   
 
 
@@ -410,91 +426,98 @@ address   name
 00000000  __TI_static_base__            
 00000000  g_pfnVectors                  
 00000400  __STACK_SIZE                  
-00007fdd  main                          
-00008469  UARTvprintf                   
-00008659  Cmd_ls                        
-000087e1  f_read                        
-00008941  f_open                        
-00008a91  disk_initialize               
-00008bd1  GPIOPadConfigSet              
-00008e15  SysCtlClockGet                
-00008f25  Cmd_cd                        
-00009221  SysCtlClockSet                
-00009315  put_fat                       
-000093f9  Cmd_cat                       
-000094d9  f_getfree                     
-000095b1  get_fat                       
-0000967d  disk_write                    
-000097eb  __aeabi_idiv0                 
-000097eb  __aeabi_ldiv0                 
-00009891  gen_numname                   
-000099cf  __aeabi_memcpy                
-000099cf  __aeabi_memcpy4               
-000099cf  __aeabi_memcpy8               
-000099cf  memcpy                        
-00009a6d  UARTgets                      
-00009b9d  disk_read                     
-00009c2d  FLASHInit                     
-00009d29  __aeabi_memclr                
-00009d29  __aeabi_memclr4               
-00009d29  __aeabi_memclr8               
-00009d2b  __aeabi_memset                
-00009d2b  __aeabi_memset4               
-00009d2b  __aeabi_memset8               
-00009d31  memset                        
-00009da5  ConfigureUART                 
-00009f01  __TI_decompress_lzss          
-00009fd1  CmdLineProcess                
-0000a035  Cmd_help                      
-0000a099  f_opendir                     
-0000a229  UARTStdioConfig               
-0000a289  ff_convert                    
-0000a3a9  FLASHSendCommand              
-0000a45d  f_readdir                     
-0000a559  GPIOPinConfigure              
-0000a5a1  UARTwrite                     
-0000a631  __TI_auto_init_nobinit_nopinit
-0000a675  __aeabi_uidiv                 
-0000a675  __aeabi_uidivmod              
-0000a6f3  SSIConfigSetExpClk            
-0000a731  FLASHReadResponse             
-0000a769  strncpy                       
-0000a7a1  StringFromFResult             
-0000a7d5  SysCtlPeripheralEnable        
-0000a809  _c_int00_noargs               
-0000a89d  f_mount                       
-0000a8f5  GPIODirModeSet                
-0000a921  ff_wtoupper                   
-0000a995  SysTickHandler                
-0000a995  disk_timerproc                
-0000a9f3  strcat                        
-0000aa85  UARTprintf                    
-0000aaa1  Cmd_pwd                       
-0000aab9  GPIOPinTypeGPIOOutput         
-0000aad1  clust2sect                    
-0000aae9  strcmp                        
-0000ab2b  strcpy                        
-0000ab3f  strlen                        
-0000ab53  GPIOPinTypeSSI                
-0000ab79  disk_status                   
-0000ab99  __TI_decompress_none          
-0000aba7  SSIDataGet                    
-0000abb3  __TI_zero_init                
-0000abd9  SSIDataPut                    
-0000abe3  SSIEnable                     
-0000abed  SSIBusy                       
-0000abf5  get_fattime                   
-0000abfd  GPIOPinWrite                  
-0000ac03  ResetISR                      
-0000ac09  SysCtlDelay                   
-0000ac0f  UARTClockSourceSet            
-0000ac15  _system_pre_init              
-0000ac19  C$$EXIT                       
-0000ac19  abort                         
-0000acf8  __TI_Handler_Table_Base       
-0000ad04  __TI_Handler_Table_Limit      
-0000ad10  __TI_CINIT_Base               
-0000ad20  __TI_CINIT_Limit              
+00008225  main                          
+00008451  UARTvprintf                   
+00008641  Cmd_ls                        
+000087c9  f_read                        
+00008929  f_open                        
+00008a79  disk_initialize               
+00008bb9  GPIOPadConfigSet              
+00008dfd  SysCtlClockGet                
+00008f0d  Cmd_cd                        
+00009209  SysCtlClockSet                
+000092fd  put_fat                       
+000093e1  Cmd_cat                       
+000094c1  f_getfree                     
+00009599  get_fat                       
+00009665  disk_write                    
+000097d3  __aeabi_idiv0                 
+000097d3  __aeabi_ldiv0                 
+00009879  gen_numname                   
+000099b7  __aeabi_memcpy                
+000099b7  __aeabi_memcpy4               
+000099b7  __aeabi_memcpy8               
+000099b7  memcpy                        
+00009a55  UARTgets                      
+00009b85  disk_read                     
+00009c15  FLASHInit                     
+00009d11  __aeabi_memclr                
+00009d11  __aeabi_memclr4               
+00009d11  __aeabi_memclr8               
+00009d13  __aeabi_memset                
+00009d13  __aeabi_memset4               
+00009d13  __aeabi_memset8               
+00009d19  memset                        
+00009d8d  ConfigureUART                 
+00009ee9  __TI_decompress_lzss          
+00009fb9  CmdLineProcess                
+0000a01d  Cmd_help                      
+0000a081  f_opendir                     
+0000a211  UARTStdioConfig               
+0000a271  ff_convert                    
+0000a391  FLASHSendCommand              
+0000a445  f_readdir                     
+0000a541  FLASHReadAddress              
+0000a58d  FLASHWriteAddress             
+0000a5d9  GPIOPinConfigure              
+0000a621  UARTwrite                     
+0000a6b1  FLASHSendCommandNoCS          
+0000a6f5  __TI_auto_init_nobinit_nopinit
+0000a739  FLASHClockOut                 
+0000a779  __aeabi_uidiv                 
+0000a779  __aeabi_uidivmod              
+0000a7f9  FLASHEraseSector              
+0000a835  SSIConfigSetExpClk            
+0000a871  FLASHReadResponse             
+0000a8a9  strncpy                       
+0000a8e1  StringFromFResult             
+0000a915  SysCtlPeripheralEnable        
+0000a949  _c_int00_noargs               
+0000a9dd  f_mount                       
+0000aa35  GPIODirModeSet                
+0000aa61  FLASHClockIn                  
+0000aa89  ff_wtoupper                   
+0000aafd  SysTickHandler                
+0000aafd  disk_timerproc                
+0000ab5b  strcat                        
+0000abed  UARTprintf                    
+0000ac09  Cmd_pwd                       
+0000ac21  FLASHWriteEnable              
+0000ac39  GPIOPinTypeGPIOOutput         
+0000ac51  clust2sect                    
+0000ac69  strcmp                        
+0000acab  strcpy                        
+0000acbf  strlen                        
+0000acd3  GPIOPinTypeSSI                
+0000acf9  disk_status                   
+0000ad19  __TI_decompress_none          
+0000ad27  SSIDataGet                    
+0000ad33  __TI_zero_init                
+0000ad59  SSIDataPut                    
+0000ad63  SSIEnable                     
+0000ad6d  SSIBusy                       
+0000ad75  get_fattime                   
+0000ad7d  GPIOPinWrite                  
+0000ad83  ResetISR                      
+0000ad89  SysCtlDelay                   
+0000ad8f  UARTClockSourceSet            
+0000ad95  _system_pre_init              
+0000ad99  C$$EXIT                       
+0000ad99  abort                         
+0000ae78  __TI_Handler_Table_Base       
+0000ae84  __TI_Handler_Table_Limit      
+0000ae90  __TI_CINIT_Base               
+0000aea0  __TI_CINIT_Limit              
 20000754  valueToSave                   
 20000760  __stack                       
 20000b60  __STACK_END                   
@@ -510,4 +533,4 @@ ffffffff  binit
 UNDEFED   __mpu_init                    
 UNDEFED   _system_post_cinit            
 
-[102 symbols]
+[109 symbols]

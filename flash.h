@@ -18,6 +18,6 @@ extern void FLASHWriteAddress(uint32_t * address, uint32_t * data, uint32_t data
 extern void FLASHReadAddress(uint32_t * address, uint32_t * data, uint32_t data_width);
 extern void FLASHReadId(uint32_t * id);
 extern void FLASHEraseSector(uint32_t * address);
-
+extern int  FLASHIsBusy();
 
 #endif /* FLASH_H_ */

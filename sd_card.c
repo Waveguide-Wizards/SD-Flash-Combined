@@ -853,6 +853,7 @@ main(void)
         //
         // Get a line of text from the user.
         //
+
         UARTgets(g_pcCmdBuf, sizeof(g_pcCmdBuf));
 
         //
@@ -861,8 +862,8 @@ main(void)
         //
         nStatus = CmdLineProcess(g_pcCmdBuf);
 
-        UARTprintf("Command: %s", g_pcCmdBuf);
-        UARTprintf(valueToSave && 0xFF);
+        UARTprintf("\nCommand: %s\n", g_pcCmdBuf);
+
         if (strcmp(g_pcCmdBuf, "cat") == 0){
             break;
         }
@@ -895,41 +896,50 @@ main(void)
 
     }
 
-          unsigned char TXbytes[3]; // or char, but unsigned char is better
-
-
-//          for(i = 0; i < valueToSave; i++){
-//              TXbytes[i] = valueToSave >> (len(valueToSave)-(i*2)) & 0xFF;
-//          }
-
 
         SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ);
 
         uint32_t address[] = {0x01, 0x00, 0x00};
         uint32_t size = 6;
-        uint32_t data[2] = {0x01, 0x01};
-        uint32_t dataRx[6];
+        uint32_t dataRx[15];
+        int index;
         FLASHInit();
 
-        uint32_t dataTx[1];
+        uint32_t dataTX[11];
+        dataTX[0] = g_pcTmpBuf[0];
+        dataTX[1] = g_pcTmpBuf[1];
+        dataTX[2] = g_pcTmpBuf[2];
+        dataTX[3] = g_pcTmpBuf[3];
+        dataTX[4] = g_pcTmpBuf[4];
+        dataTX[5] = g_pcTmpBuf[5];
+        dataTX[6] = g_pcTmpBuf[6];
+        dataTX[7] = g_pcTmpBuf[7];
+        dataTX[8] = g_pcTmpBuf[8];
+        dataTX[9] = g_pcTmpBuf[9];
+        dataTX[10] = g_pcTmpBuf[10];
 
 
-
-        dataTx[0] = valueToSave & 0xFF;
+        uint32_t id[4];
+        FLASHReadId(id);
         FLASHWriteEnable();
         FLASHEraseSector(address);
+        while(FLASHIsBusy());
         FLASHWriteEnable();
-        FLASHWriteAddress(address,dataTx,1);
-        FLASHReadAddress(address,dataRx,1);
+        FLASHWriteAddress(address,dataTX,11);
+        while(FLASHIsBusy());
+        FLASHReadAddress(address,dataRx,11);
 
 
 
 
-        int index;
-        UARTprintf("Recieved\n");
-        for(index = 0; index < size; index++){
-            UARTprintf("'%x' ", dataRx[index]);
+
+        UARTprintf("Data Recieved from Flash: ");
+        for(index = 4; index < 15; index++){
+            UARTprintf("%c ", dataRx[index]);
         }
+
+
+
 
     return(0);
 }

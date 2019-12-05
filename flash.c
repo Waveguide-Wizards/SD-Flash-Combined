@@ -192,7 +192,11 @@ void FLASHClockIn(uint32_t size){
         // will wait until there is data in the receive FIFO before returning.
         //
         SSIDataGet(SSI1_BASE, &dummy[1]);
+        while(SSIBusy(SSI1_BASE))
+        {
+        }
     }
+
 }
 
 
@@ -208,25 +212,81 @@ void FLASHWriteAddress(uint32_t * address, uint32_t * data, uint32_t data_width)
     uint32_t command[1];
     command[0] = 0x02;
 
+    uint32_t data1[4];
+    uint32_t data2[7];
+    uint32_t i = 0;
+    for(i = 0; i < 4; i++){
+        data1[i] = data[i];
+
+    }
+    for(i = 0; i < 7; i++){
+        data2[i] = data[i+4];
+    }
+
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
     FLASHSendCommandNoCS(command,1);
     FLASHSendCommandNoCS(address,3);
-    FLASHSendCommandNoCS(data,data_width);
+    FLASHSendCommandNoCS(data1,4);
+    FLASHClockIn(8);
+    FLASHSendCommandNoCS(data2,7);
+    FLASHClockIn(7);
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
+    uint32_t trash[1];
 
-    FLASHClockIn(data_width+4);
+    /*while(SSIDataGetNonBlocking(SSI0_BASE, &trash[0]))
+    {
+    }*/
+
+    //FLASHClockIn(8);
+
+    //FLASHClockIn(8);
+
+}
+
+int FLASHIsBusy(){
+    uint32_t command[1];
+    command[0] = 0x05;
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
+    FLASHSendCommandNoCS(command,1);
+    FLASHClockOut(1);
+    GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
+    uint32_t data[2];
+    FLASHReadResponse(data,2);
+    return data[1]  & 0x1 ;
 
 }
 
 void FLASHReadAddress(uint32_t * address, uint32_t * data, uint32_t data_width){
     uint32_t command[1];
+    uint32_t data2[8];
+    uint32_t data3[8];
     command[0] = 0x03;
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x0);
     FLASHSendCommandNoCS(command,1);
     FLASHSendCommandNoCS(address,3);
-    FLASHClockOut(data_width);
+    FLASHClockOut(4);
+    FLASHReadResponse(data2,8);
+    FLASHClockOut(7);
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_1, 0x2);
-    FLASHReadResponse(data,data_width+4);
+    FLASHReadResponse(data3,7);
+
+    data[0] = data2[0];
+    data[1] = data2[1];
+    data[2] = data2[2];
+    data[3] = data2[3];
+    data[4] = data2[4];
+    data[5] = data2[5];
+    data[6] = data2[6];
+    data[7] = data2[7];
+
+    data[8] = data3[0];
+    data[9] = data3[1];
+    data[10] = data3[2];
+    data[11] = data3[3];
+    data[12] = data3[4];
+    data[13] = data3[5];
+    data[14] = data3[6];
+    data[15] = data3[7];
 
 }
 
